@@ -14,5 +14,9 @@
             <h1>hola</h1>
         </div>
     </div>
+
+    <div>
+        @livewire('Prueba')
+    </div>
 </body>
 </html>
