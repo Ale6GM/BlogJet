@@ -4,22 +4,25 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePostRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        if($this->user_id == auth()->user()->id) {
+        // Esta regla evitaba que un post pueda ser asignado a un usuario diferente del que lo creo
+        /* if($this->user_id == auth()->user()->id) {
             return true;
         } else {
             return false;
-        }
+        } */
 
         /* Esta condicio compara si el id del usuario que se envia desde la vista mediante un input
         oculto coincide con la informacion del usuario autenticado, si coincide se le eautoriza y pasa a la validacion pero sino entonces no se le autoriza a continuar
         */
+
+        return true;
     }
 
     /**
@@ -29,12 +32,18 @@ class StorePostRequest extends FormRequest
      */
     public function rules(): array
     {
+        $post = $this->route()->parameter('post');
+
         $rules = [
             'name' => 'required',
-            'slug' => 'required|unique:posts',
+            'slug' => 'required|unique:posts,slug',
             'status' => 'required|in:1,2',
             'file' => 'image'
         ];
+
+        if($post) {
+            $rules['slug'] = 'required|unique:posts,slug,' . $post->id;
+        }
 
         if($this->status == 2) {
             $rules = array_merge($rules, [ // array_merge es un metodo de php que permite fusionar dos arrays, y recibe a los dos como parametros

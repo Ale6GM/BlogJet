@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
@@ -35,7 +35,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(PostRequest $request)
     {
         
 
@@ -75,15 +75,39 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::pluck('name', 'id'); // este metodo pluck coge solo una columna de la tabla y como segundo parametro se le puede pasar una llave para luego pasarlo a laravel colective en el formato deseado.
+        $tags = Tag::all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        return $post;
+        $post->update($request->all());
+
+        if($request->file('file')) {
+            $url = Storage::disk('public')->put('posts', $request->file('file'));
+
+            if($post->image) {
+                Storage::delete($post->image->url);
+
+                $post->image->update([
+                    'url' => $url
+                ]);
+            } else {
+                $post->image()->create([
+                    'url'=> $url
+                ]);
+            }
+        }
+
+        if($request->tags) { 
+            $post->tags()->attach($request->tags);
+        }
+
+        return redirect()->route('admin.posts.index')->with('info','El Post se Actualizo con exito');
     }
 
     /**
