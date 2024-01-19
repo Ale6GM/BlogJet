@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3  gap-6">
             @foreach ($posts as $post)
-                <article class="w-full h-80 bg-cover bg-center @if($loop->first) md:col-span-2 @endif" style="background-image: url({{Storage::url($post->image->url)}})">
+                <article class="w-full h-80 bg-cover bg-center @if($loop->first) md:col-span-2 @endif" style="background-image: url(@if($post->image) {{Storage::url($post->image->url)}} @else https://media.istockphoto.com/id/1418475387/photo/robotic-hand-pressing-a-keyboard-on-a-laptop-3d-rendering.webp?s=2048x2048&w=is&k=20&c=dX60FXq1lYs1GW4PwAxSEpgewaCJjZ2n23xbR2iKqVM= @endif)">
                     <div class="w-full h-full px-8 flex flex-col justify-center "> {{-- centran el titulo y lo ponen en el medio --}}
                         <div>
                             {{-- Mostramos la etiquetas que le pertenecen al post mediante el uso de la relacion tags y el uso de un foreach --}}
