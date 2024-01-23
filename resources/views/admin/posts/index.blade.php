@@ -3,7 +3,7 @@
 @section('title', 'Panel de Administracion')
 
 @section('content_header')
-    <a class="btn btn-primary float-right" href="{{route('admin.posts.create')}}">Insertar Nuevo Post</a>
+    <a class="btn btn-primary btn-sm float-right" href="{{route('admin.posts.create')}}">Insertar Nuevo Post</a>
     <h1>Listado de Post creados</h1>
     @if (session('info'))
         <div class="alert alert-success">

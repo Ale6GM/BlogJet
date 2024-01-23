@@ -86,25 +86,26 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $post->update($request->all());
-
+        // regunto si por el formulario viene una imagen
         if($request->file('file')) {
+            // si viene la subo al servidor
             $url = Storage::disk('public')->put('posts', $request->file('file'));
-
+            // si el post ya tiene una imagen elimino la vieja y la actualizo
             if($post->image) {
                 Storage::delete($post->image->url);
-
                 $post->image->update([
                     'url' => $url
                 ]);
             } else {
+                // en caso que no tenga pues la creo
                 $post->image()->create([
                     'url'=> $url
                 ]);
             }
         }
-
+        // verifico si tiene etiquetas y las que tenga las sicronizo mediante la relacion con el modelo tags
         if($request->tags) { 
-            $post->tags()->attach($request->tags);
+            $post->tags()->sync($request->tags);
         }
 
         return redirect()->route('admin.posts.index')->with('info','El Post se Actualizo con exito');
@@ -115,6 +116,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        return $post;
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')->with('info','El Post se Eliminó Correctamente');
     }
 }
