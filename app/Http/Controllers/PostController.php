@@ -15,6 +15,7 @@ class PostController extends Controller
     }
 
     public function show(Post $post) {
+        $this->authorize('publicado', $post);
         $relacionados = Post::where('category_id', $post->category_id)
                     ->where('status', 2)
                     ->where('id', '!=', $post->id) //Condiciona que se devuelvan los post y se obvie este mismo post

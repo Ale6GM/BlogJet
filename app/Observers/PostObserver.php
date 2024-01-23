@@ -12,7 +12,7 @@ class PostObserver
      */
     public function creating(Post $post): void
     {
-        if(! \App::runningInConsole) {
+        if(! \App::runningInConsole()) {
             $post->user_id = auth()->user()->id;
         }
     }

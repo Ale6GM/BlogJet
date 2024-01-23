@@ -75,6 +75,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('author', $post);
+
         $categories = Category::pluck('name', 'id'); // este metodo pluck coge solo una columna de la tabla y como segundo parametro se le puede pasar una llave para luego pasarlo a laravel colective en el formato deseado.
         $tags = Tag::all();
         return view('admin.posts.edit', compact('post', 'categories', 'tags'));
@@ -85,6 +87,8 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
+        $this->authorize('author', $post);
+
         $post->update($request->all());
         // regunto si por el formulario viene una imagen
         if($request->file('file')) {
@@ -116,6 +120,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('author', $post);
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('info','El Post se Eliminó Correctamente');
