@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
     {   //Storage::deleteDirectory('posts'); pendiente a saber por que no funciona
        // Storage::makeDirectory('posts'); // peniente a revsar porque no funciona tuve que crear manualemnte la carpeta posts
 
+       $this->call(RoleSeeder::class);
+
 
         $this->call(UserSeeder::class);
         Category::factory(4)->create();

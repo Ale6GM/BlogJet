@@ -4,11 +4,15 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('', [HomeController::class, 'index'])->name('admin.home');
+Route::get('', [HomeController::class, 'index'])->middleware('can:admin.home')->name('admin.home');
 
-Route::resource('categories', CategoryController::class)->names('admin.categories')->parameters(['Categories'=> 'category']);
-Route::resource('tags', TagController::class)->names('admin.tags')->parameters(['Tag'=>'tag']);
+// para proteger estas rutas de tipo resource con el middleware lo vamos a tener que hacer desde el controlador para proteger cada uno de los metodos.
+Route::resource('users', UserController::class)->only(['index', 'edit', 'update'])->names('admin.users')->parameters(['User' => 'user']);
+
+Route::resource('categories', CategoryController::class)->names('admin.categories')->except('show')->parameters(['Categories'=> 'category']);
+Route::resource('tags', TagController::class)->names('admin.tags')->except('show')->parameters(['Tag'=>'tag']);
 Route::resource('posts', PostController::class)->names('admin.posts')->parameters(['Post' => 'post']);
 

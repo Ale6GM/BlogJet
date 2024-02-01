@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Panel de Administracion')
+@section('title', 'Administracion de Usuarios')
 
 @section('content_header')
-    <h1>Mostrar Categoria</h1>
+    <h1>Listado de Usuarios</h1>
 @stop
 
 @section('content')
-    <p>Bienvenidos al panel de Administracion del Blog Agomin</p>
+    @livewire('admin.user-index')
 @stop
 
 @section('css')
