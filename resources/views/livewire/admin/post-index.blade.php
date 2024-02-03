@@ -18,13 +18,19 @@
                         <tr>
                             <td>{{$post->id}}</td>
                             <td>{{$post->name}}</td>
-                            <td width = 10px><a class="btn btn-primary btn-sm" href="{{route('admin.posts.edit', $post)}}">Editar</a></td>
                             <td width = 10px>
-                                <form action="{{route('admin.posts.destroy', $post)}}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-                                </form>
+                                @can('admin.posts.edit')
+                                <a class="btn btn-primary btn-sm" href="{{route('admin.posts.edit', $post)}}">Editar</a>
+                                @endcan
+                            </td>
+                            <td width = 10px>
+                                @can('admin.posts.update')
+                                    <form action="{{route('admin.posts.destroy', $post)}}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                                    </form>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
